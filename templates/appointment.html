@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+   body {
+    background: url("/static/big.jpg")
+   }
+  </style>
+    <p><h4>Здравствуй, {{ appointment.author }}. Новая статья в твоём любимом разделе!</h4></p>
+    <h2> Название статьи: {{ appointment.headline }}</h2><br>
+    <h7> {{ appointment.text|truncatechars:50 }}</h7><br><br>
+    <h7> Категории:</h7><br><br>
+    {%   for tag in appointment.categories.all %}
+
+    <h7> {{ tag.tag }}</h7><br>
+    {%   endfor  %}<br>
+    </li>
+            <a href="{{ link }}">Ссылка на статью</a>
+    </li><br><br>
+
+    <h7> С уважением, команда AlexNews</h7>
+    {% endblock content %}
+</body>
+</html>

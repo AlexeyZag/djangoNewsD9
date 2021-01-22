@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+   body {
+    background: url("/static/big.jpg")
+   }
+  </style>
+    <p><h4>Здравствуйте! Новые статьи в твоём любимом разделе {{ tag }}</h4></p>
+    {%   for post in posts %}
+    <a href="http://127.0.0.1:8000/news/{{ post.id }}">{{ post.headline }}</a><br>
+    {%   endfor  %}<br>
+    <br>
+
+    <h7> С уважением, команда AlexNews</h7>
+    {% endblock content %}
+</body>
+</html>
