@@ -1,8 +1,9 @@
 from django.urls import path
-from.views import AuthorsList, AuthorDetail, PostList, PostDetail, SearchList, SearchDetail, PostUpdateView, PostDeleteView, AddProtectedView, CategoryAdd, CategoryRemove
+from.views import AuthorsList, AuthorDetail, PostList, PostDetail, SearchList, SearchDetail, PostUpdateView, PostDeleteView, AddProtectedView, CategoryAdd, CategoryRemove, LikePost, DislikePost, AddComment, LikeComment, DislikeComment
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
     path('', PostList.as_view(), name = 'post_list'),
@@ -16,6 +17,11 @@ urlpatterns = [
     path('<int:pk>/delete/', PostDeleteView.as_view(), name= 'post_delete'),
     path('subscribe/<int:pk>', CategoryAdd.as_view(), name= 'subscribe'),
     path('unsubscribe/<int:pk>', CategoryRemove.as_view(), name= 'unsubscribe'),
+    path('like/<int:pk>', LikePost.as_view(), name= 'like'),
+    path('dislike/<int:pk>', DislikePost.as_view(), name= 'dislike'),
+    path('addcomment/<int:pk>', AddComment.as_view(), name= 'add_comment'),
+    path('likecomment/<int:pk>', LikeComment.as_view(), name= 'like_comment'),
+    path('dislikecomment/<int:pk>', DislikeComment.as_view(), name= 'dislike_comment'),
     #path('appointment/', AppointmentView.as_view(), name= 'appointments'),
 
 ]

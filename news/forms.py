@@ -1,5 +1,5 @@
 from django.forms import ModelForm, TextInput, Textarea, Select, SelectMultiple, CheckboxSelectMultiple
-from .models import Post, Category
+from .models import Post, Category, Comment
 class PostForm(ModelForm):
     class Meta:
         model = Post
@@ -26,3 +26,12 @@ class CategoryForm(ModelForm):
     class Meta:
         model = Category
         fields = []
+class AddCommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['com_text']
+        widgets = {
+            'com_text': Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите текст...'
+            }),}

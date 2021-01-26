@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from datetime import datetime, date
-
-
+from django.core.cache import cache
+from django.utils import timezone
 # Create your models here.
 
 
@@ -30,6 +30,7 @@ class Author(models.Model):
                 sum_post_com += comment.com_rating
         self.rating = sum_post * 3 + sum_com + sum_post_com
         self.save()
+        return self.rating
 
     def __str__(self):
         return f'{self.author.username}'
@@ -75,6 +76,10 @@ class Post(models.Model):
     def preview(self):
         return self.text[:124] + '...'
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # сначала вызываем метод родителя, чтобы объект сохранился
+        cache.delete(f'product-{self.pk}')  # затем удаляем его из кэша, чтобы сбросить его
+
 
 
     def __str__(self):
@@ -92,7 +97,7 @@ class Comment(models.Model):
     comment_post = models.ForeignKey(Post, on_delete = models.CASCADE)
     comment_user = models.ForeignKey(User, on_delete = models.CASCADE)
     com_text = models.TextField()
-    com_time = models.DateTimeField(auto_now_add = True)
+    com_time = models.DateTimeField(default=timezone.now)
     com_rating = models.IntegerField(default=0)
 
     def like(self):
@@ -104,6 +109,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.comment_post}, {self.comment_user}, {self.com_rating}'
+
+    def get_absolute_url(self):  # добавим абсолютный путь чтобы после создания нас перебрасывало на страницу с новостью
+        return f'/news/{self.comment_post.id}'
 
 
 
@@ -128,3 +136,7 @@ class Comment(models.Model):
 #PostCategory.objects.all()
 #Post.objects.filter(categories__tag= 'Спорт')
 #Post.objects.filter(create_time__gt= datetime.fromtimestamp(datetime.timestamp(datetime.now()) - 604800), categories=tag).values('id')
+#Comment.objects.filter(comment_post_id= 3)
+#Comment.objects.get(pk = 3).comment_post.id
+#Post.objects.get(pk = 3).author.update_rating()
+#Author.objects.get(pk = 1).rating

@@ -12,7 +12,7 @@ Post
     <h7>Дата публикации: {{ post.create_time|date:'M d Y h:m' }}</h7><br />
     <h7>Текст:</h7><br />
         {{ post.text|censor }}<br />
-    <h7>Автор: {{ post.author }}</h7><br />
+    <h7>Автор: {{ post.author }}     Рейтинг: {{ post.author.update_rating }}</h7><br />
     {% for tag in post_categories %}
     {{ tag.tag }}
     {% if tag not in user_categories %}
@@ -23,5 +23,19 @@ Post
         <button> <a href="{% url 'unsubscribe' tag.id  %}">отписаться?</a> </button><br>
 {% endif %}
     {% endfor %}
+    <h7>Рейтинг статьи: {{ rating }}</h7><br><br>
+    <button> <a href="{% url 'like' post.id  %}">понравилась статья</a> </button>
+        <button> <a href="{% url 'dislike' post.id  %}">не понравилась статья</a> </button><br>
+    <h5>Комментарии:</h5>
+    {% for com in comments %}
+    {{ com.comment_user }}: {{ com.com_text }}<br>
+        {{ com.com_time }}<br>
+        <h7>Оценка:  </h7>{{ com.com_rating }}<br>
+        <button> <a href="{% url 'like_comment' com.id  %}">лайкнуть</a> </button>
+        <button> <a href="{% url 'dislike_comment' com.id  %}">дислайкнуть</a> </button><br>
+    {% endfor %}
+    <br>
+    <button> <a href="{% url 'add_comment' post.id  %}">Добавить комментарий</a> </button>
+
 {% endblock content %}
 
